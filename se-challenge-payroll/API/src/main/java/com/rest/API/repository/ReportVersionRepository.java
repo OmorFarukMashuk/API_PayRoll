@@ -7,5 +7,5 @@ import com.rest.API.model.ReportVersion;
 
 @Repository
 public interface ReportVersionRepository extends JpaRepository<ReportVersion, Integer>{
-
+	
 }

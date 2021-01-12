@@ -49,9 +49,10 @@ public class APIService {
 		tr.setJobGroup(jbGrp.charAt(0));
 		
 		repo.save(tr);
-		
+			
 
 	}
+
 	
 	public void readCSV(MultipartFile csvFile) {
 
@@ -203,4 +204,17 @@ public class APIService {
 
 		
 	}
+
+
+	public void deleteEmployeeReport(List<TimeReport> timeReports) {
+		// TODO Auto-generated method stub
+		
+		for(TimeReport tr : timeReports) {
+			repo.deleteById(tr.getId());
+		}
+		return;
+
+	}
+
+
 }

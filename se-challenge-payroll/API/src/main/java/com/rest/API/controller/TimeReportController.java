@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,47 +26,60 @@ public class TimeReportController {
 
 	@Autowired
 	TimeReportRepository timeReportRepository;
-	
+
 	@Autowired
 	MapperConfig mapperConfig;
-	
+
 	@Autowired
 	APIService apiService;
-	
+
 	// Upload csv
 	@PostMapping("/add")
-	public ResponseEntity<String> addTimeReport(@RequestParam("file") MultipartFile file){
-			
+	public ResponseEntity<String> addTimeReport(@RequestParam("file") MultipartFile file) {
+
 		String csvfileName = file.getOriginalFilename();
-		
+
 		try {
 			apiService.validate(csvfileName);
 
-			
 		} catch (Exception e) {
 			// TODO: handle exception
-			
+
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 		apiService.readCSV(file);
-		
-		return new ResponseEntity<String>("Success", HttpStatus.OK); 
+
+		return new ResponseEntity<String>("Success", HttpStatus.OK);
 	}
-	
+
 	// Return obj
 	@GetMapping("/report")
 	public String getTimeReport() throws JsonProcessingException {
-		
-		
+
 		List<TimeReport> timeReports = timeReportRepository.findAll();
-		
+
 		Payroll payroll = apiService.generateReports(timeReports);
-		
-		
+
 		ObjectWriter ow = mapperConfig.objectMapper().writer().withDefaultPrettyPrinter();
-		
-		
+
 		String json = ow.writeValueAsString(payroll);
 		return json;
 	}
+
+	@DeleteMapping("/delete/{employeeID}")
+	public ResponseEntity<String> getReportAfterDeleteByEmployeeID(@PathVariable(value = "employeeID") int employeeID) {
+
+		try {
+
+			List<TimeReport> timeReports = timeReportRepository.findAllByEmployeeID(employeeID);
+			apiService.deleteEmployeeReport(timeReports);
+		} catch (Exception e) {
+			// TODO: handle exception
+
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+
+		return new ResponseEntity<String>("Success", HttpStatus.OK);
+	}
+
 }
