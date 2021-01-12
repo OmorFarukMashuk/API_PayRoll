@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -67,7 +68,7 @@ public class TimeReportController {
 	}
 
 	@DeleteMapping("/delete/{employeeID}")
-	public ResponseEntity<String> getReportAfterDeleteByEmployeeID(@PathVariable(value = "employeeID") int employeeID) {
+	public ResponseEntity<String> deleteEmployeeTimeReport(@PathVariable(value = "employeeID") int employeeID) {
 
 		try {
 
@@ -75,7 +76,21 @@ public class TimeReportController {
 			apiService.deleteEmployeeReport(timeReports);
 		} catch (Exception e) {
 			// TODO: handle exception
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
 
+		return new ResponseEntity<String>("Success", HttpStatus.OK);
+	}
+	
+	@PutMapping("/update/{employeeID}/{jobGroup}")
+	public ResponseEntity<String> updateEmployeeJobGroupInTimeReport(@PathVariable(value = "employeeID") int employeeID,  @PathVariable("jobGroup") char jobGroup) {
+
+		try {
+
+			List<TimeReport> timeReports = timeReportRepository.findAllByEmployeeID(employeeID);
+			apiService.updateEmployeeJobgroup(timeReports, jobGroup);
+		} catch (Exception e) {
+			// TODO: handle exception
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 
