@@ -208,27 +208,16 @@ public class APIService {
 
 	public void deleteEmployeeReport(List<TimeReport> timeReports) {
 		// TODO Auto-generated method stub
-		
-		for(TimeReport tr : timeReports) {
-			repo.deleteById(tr.getId());
-		}
-		return;
-
+		repo.deleteAll(timeReports);
 	}
 
 
 	public void updateEmployeeJobgroup(List<TimeReport> timeReports, char jobGroup) {
 		// TODO Auto-generated method stub
-		
-		
-//		TimeReport tr = repo.findById(
-		
+				
 		for(TimeReport tr : timeReports) {
-			
 			tr.setJobGroup(jobGroup);
 			repo.save(tr);
-			
-			
 		}
 		
 		
