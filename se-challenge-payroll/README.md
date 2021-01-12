@@ -39,7 +39,7 @@ If any issue occurs during set up, please email to mofaruk@uwaterloo.ca
 - Go to the request and set enter request url to http://localhost:8080/report
 - Send request 
 - Upon Successful request the response will be JSON
-
+ <!--
 # Question Answer
 - How did you test that your implementation was correct?
   - tested with sample csv file (using Postman)
@@ -80,7 +80,7 @@ comfortable with.
 
 Feel free to email [dev.careers@waveapps.com](dev.careers@waveapps.com) if you
 have any questions.
-
+--->
 ## Project Description
 
 Imagine that this is the early days of Wave's history, and that we are prototyping a new payroll system API. A front end (that hasn't been developed yet, but will likely be a single page application) is going to use our API to achieve two goals:
@@ -240,7 +240,7 @@ We've agreed to build an API with the following endpoints to serve HTTP requests
      }
    }
    ```
-
+ <!--
 We consider ourselves to be language agnostic here at Wave, so feel free to use any combination of technologies you see fit to both meet the requirements and showcase your skills. We only ask that your submission:
 
 - Is easy to set up
@@ -256,6 +256,7 @@ Please commit the following to this `README.md`:
    - How did you test that your implementation was correct?
    - If this application was destined for a production environment, what would you add or change?
    - What compromises did you have to make as a result of the time constraints of this challenge?
+
 
 ## Submission Instructions
 
@@ -277,3 +278,4 @@ Evaluation of your submission will be based on the following criteria.
    they explained?
 1. Did you separate any concerns in your application? Why or why not?
 1. Does your solution use appropriate data types for the problem as described?
+ --->
