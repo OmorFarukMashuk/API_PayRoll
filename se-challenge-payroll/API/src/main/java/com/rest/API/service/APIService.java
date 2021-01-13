@@ -40,16 +40,9 @@ public class APIService {
 	@Autowired
 	ReportVersionRepository versionRepo;
 	
-	public void saveEntryToDatabase(String date, String hrsWorked, String empID, String jbGrp) throws ParseException {
+	public void saveToDatabase(List<TimeReport> timeReports) throws ParseException {
 
-		TimeReport tr = new TimeReport();
-		tr.date = new SimpleDateFormat("dd/MM/yyyy").parse(date);
-		tr.setHoursWorked(Double.parseDouble(hrsWorked));
-		tr.setEmployeeId(Integer.parseInt(empID));
-		tr.setJobGroup(jbGrp.charAt(0));
-		
-		repo.save(tr);
-			
+		repo.saveAll(timeReports);
 
 	}
 
@@ -61,6 +54,8 @@ public class APIService {
 		String csvSplitBy = ",";
 
 		//timeReports = new ArrayList<TimeReport>();
+		
+		List<TimeReport> timeReports = new ArrayList<TimeReport>();
 		try {
             InputStream is = csvFile.getInputStream();
 			br = new BufferedReader(new InputStreamReader(is));
@@ -71,9 +66,12 @@ public class APIService {
 				String[] ln = line.split(csvSplitBy);
 				
 				// Need to save in MySQL
-				saveEntryToDatabase(ln[0], ln[1], ln[2], ln[3]);
+				TimeReport tr = parseCSVRow(ln);
+				timeReports.add(tr);
 
 			}
+			
+			saveToDatabase(timeReports);
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -94,6 +92,18 @@ public class APIService {
 
 	}
 	
+	public TimeReport parseCSVRow(String[] ln) throws ParseException {
+		// TODO Auto-generated method stub
+		
+		TimeReport tr = new TimeReport();
+		tr.date = new SimpleDateFormat("dd/MM/yyyy").parse(ln[0]);
+		tr.setHoursWorked(Double.parseDouble(ln[1]));
+		tr.setEmployeeId(Integer.parseInt(ln[2]));
+		tr.setJobGroup(ln[3].charAt(0));
+		return tr;
+	}
+
+
 	public String generateKey(char keyPart1, Date workDate) {
 
 		Calendar cal = Calendar.getInstance();
@@ -211,7 +221,6 @@ public class APIService {
 		repo.deleteAll(timeReports);
 	}
 
-
 	public void updateEmployeeJobgroup(List<TimeReport> timeReports, char jobGroup) {
 		// TODO Auto-generated method stub
 				
@@ -219,9 +228,7 @@ public class APIService {
 			tr.setJobGroup(jobGroup);
 			repo.save(tr);
 		}
-		
-		
-		
+
 	}
 
 

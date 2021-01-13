@@ -67,13 +67,14 @@ public class TimeReportController {
 		return json;
 	}
 
-	@DeleteMapping("/delete/{employeeID}")
-	public ResponseEntity<String> deleteEmployeeTimeReport(@PathVariable(value = "employeeID") int employeeID) {
+	@PutMapping("/update/{employeeID}/{jobGroup}")
+	public ResponseEntity<String> updateEmployeeJobGroupInTimeReport(@PathVariable(value = "employeeID") int employeeID,
+			@PathVariable("jobGroup") char jobGroup) {
 
 		try {
 
 			List<TimeReport> timeReports = timeReportRepository.findAllByEmployeeID(employeeID);
-			apiService.deleteEmployeeReport(timeReports);
+			apiService.updateEmployeeJobgroup(timeReports, jobGroup);
 		} catch (Exception e) {
 			// TODO: handle exception
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -81,14 +82,14 @@ public class TimeReportController {
 
 		return new ResponseEntity<String>("Success", HttpStatus.OK);
 	}
-	
-	@PutMapping("/update/{employeeID}/{jobGroup}")
-	public ResponseEntity<String> updateEmployeeJobGroupInTimeReport(@PathVariable(value = "employeeID") int employeeID,  @PathVariable("jobGroup") char jobGroup) {
+
+	@DeleteMapping("/delete/{employeeID}")
+	public ResponseEntity<String> deleteEmployeeTimeReport(@PathVariable(value = "employeeID") int employeeID) {
 
 		try {
 
 			List<TimeReport> timeReports = timeReportRepository.findAllByEmployeeID(employeeID);
-			apiService.updateEmployeeJobgroup(timeReports, jobGroup);
+			apiService.deleteEmployeeReport(timeReports);
 		} catch (Exception e) {
 			// TODO: handle exception
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
